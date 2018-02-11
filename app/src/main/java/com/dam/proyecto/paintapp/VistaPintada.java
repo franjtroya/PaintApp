@@ -23,7 +23,7 @@ public class VistaPintada extends View {
     private final int RECTANGULO = 0;
     private final int CIRCULO = 1;
     private final int LINEA_RECTA = 2;
-    private final int LINEA_LIBRE = 3;
+    private final int LINEA_POLI = 3;
 
     public VistaPintada(Context context) {
         super(context);
@@ -41,40 +41,53 @@ public class VistaPintada extends View {
         pincel.setStrokeWidth(5);
     }
 
+    private void init(){
+        pincel = new Paint();
+        pincel.setColor(Color.BLACK);
+        pincel.setAntiAlias(true);
+        pincel.setStrokeWidth(5);
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         setCanvasFondo(canvas);
         // Hasta aqui va a estar siempre.
-
-        /** Aqui se dibuja el canvas de bits asociado mientras estoy dibujando de forma provisional*/
+        init();
+        /**
+         * Aqui se dibuja el canvas de bits asociado mientras estoy dibujando de forma provisional
+         */
         canvas.drawBitmap(mapaDeBits, 0 , 0, null);
         pincel.setStyle(Paint.Style.STROKE);
 
         switch (trazo_actual) {
             case RECTANGULO:
-                canvas.drawRect(startX, startY, stopX, stopY, pincel);
-                canvasFondo.drawRect(startX, startY, stopX, stopY, pincel);
+                if(pintando){
+                    canvas.drawRect(startX, startY, stopX, stopY, pincel);
+                } else {
+                    canvasFondo.drawRect(startX, startY, stopX, stopY, pincel);
+                }
                 break;
             case CIRCULO:
                 if(pintando){
                     canvas.drawLine(startX, startY, stopX, stopY, pincel);
                     canvas.drawCircle(startX, startY,radio, pincel);
                 } else {
-                    canvasFondo.drawLine(startX, startY, stopX, stopY, pincel);
                     canvasFondo.drawCircle(startX, startY,radio, pincel);
                 }
                 break;
             case LINEA_RECTA:
-                canvas.drawLine(startX, startY, stopX, stopY, pincel);
-                canvasFondo.drawLine(startX, startY, stopX, stopY, pincel);
+                if (pintando){
+                    canvas.drawLine(startX, startY, stopX, stopY, pincel);
+                } else {
+                    canvasFondo.drawLine(startX, startY, stopX, stopY, pincel);
+                }
                 break;
-            case LINEA_LIBRE:
+            case LINEA_POLI:
                 canvas.drawLine(startX, startY, stopX, stopY, pincel);
                 canvasFondo.drawLine(startX, startY, stopX, stopY, pincel);
                 break;
         }
-
     }
 
     @Override
@@ -92,29 +105,18 @@ public class VistaPintada extends View {
     public boolean onTouchEvent(MotionEvent event) {
         float x = event.getX();
         float y = event.getY();
-        switch (event.getAction()){
-            case MotionEvent.ACTION_DOWN:
-                pintando = true;
-                stopX= startX = x;
-                stopY = startY = y;
-                rectaPoligonal.reset();
-                rectaPoligonal.moveTo(startX, startY);
+        switch (trazo_actual){
+            case RECTANGULO:
+                rectanguloCoord(x, y, event);
                 break;
-            case MotionEvent.ACTION_MOVE:
-                radio = (float) Math.sqrt(Math.pow(startX - stopX,2)+Math.pow(startY - stopY,2));
-                startX = stopX;
-                stopX = x;
-                startY = stopY;
-                stopY = y;
-                rectaPoligonal.quadTo(startX, startY, stopX, stopY);
+            case CIRCULO:
+                circuloCoord(x, y, event);
                 break;
-            case MotionEvent.ACTION_UP:
-                pintando = false;
-                radio = (float) Math.sqrt(Math.pow(startX - stopX,2)+Math.pow(startY - stopY,2));
-                startX = stopX;
-                stopX = x;
-                startY = stopY;
-                stopY = y;
+            case LINEA_RECTA:
+                lineaRectaCoord(x, y, event);
+                break;
+            case LINEA_POLI:
+                lineaPoliCoord(x, y, event);
                 break;
         }
         invalidate();
@@ -126,28 +128,97 @@ public class VistaPintada extends View {
     }
 
     public void setCirculo(){
-        trazo_actual = RECTANGULO;
+        trazo_actual = CIRCULO;
     }
 
     public void setLineaRecta(){
-        trazo_actual = RECTANGULO;
+        trazo_actual = LINEA_RECTA;
     }
 
     public void setLineaPoligonal(){
-        trazo_actual = RECTANGULO;
+        trazo_actual = LINEA_POLI;
     }
 
-    private void rectanguloCoord(){
-
+    private void rectanguloCoord(float x, float y, MotionEvent event){
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                pintando = true;
+                startX = x;
+                startY = y;
+                break;
+            case MotionEvent.ACTION_MOVE:
+                stopX = x;
+                stopY = y;
+                break;
+            case MotionEvent.ACTION_UP:
+                pintando = false;
+                stopX = x;
+                stopY = y;
+                break;
+        }
     }
-    private void circuloCoord(){
-
+    private void circuloCoord(float x, float y, MotionEvent event){
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                pintando = true;
+                startX = x;
+                startY = y;
+                break;
+            case MotionEvent.ACTION_MOVE:
+                radio = (float) Math.sqrt(Math.pow(startX - stopX,2)+Math.pow(startY - stopY,2));
+                stopX = x;
+                stopY = y;
+                break;
+            case MotionEvent.ACTION_UP:
+                pintando = false;
+                radio = (float) Math.sqrt(Math.pow(startX - stopX,2)+Math.pow(startY - stopY,2));
+                stopX = x;
+                stopY = y;
+                break;
+        }
     }
-    private void lineaRectaCoord(){
-
+    private void lineaRectaCoord(float x, float y, MotionEvent event){
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                pintando = true;
+                startX = x;
+                startY = y;
+                break;
+            case MotionEvent.ACTION_MOVE:
+                stopX = x;
+                stopY = y;
+                break;
+            case MotionEvent.ACTION_UP:
+                pintando = false;
+                stopX = x;
+                stopY = y;
+                break;
+        }
     }
-    private void lineaPoliCoord(){
-
+    private void lineaPoliCoord(float x, float y, MotionEvent event){
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                pintando = true;
+                stopX= startX = x;
+                stopY = startY = y;
+                rectaPoligonal.reset();
+                rectaPoligonal.moveTo(startX, startY);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                startX = stopX;
+                stopX = x;
+                startY = stopY;
+                stopY = y;
+                rectaPoligonal.quadTo(startX, startY, stopX, stopY);
+                break;
+            case MotionEvent.ACTION_UP:
+                pintando = false;
+                startX = stopX;
+                stopX = x;
+                startY = stopY;
+                stopY = y;
+                break;
+        }
     }
 
 
