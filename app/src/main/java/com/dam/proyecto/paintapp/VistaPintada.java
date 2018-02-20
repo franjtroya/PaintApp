@@ -8,8 +8,13 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import java.util.AbstractList;
+import java.util.AbstractQueue;
+import java.util.ArrayList;
 
 /**
  * Created by dam on 02/02/2018.
@@ -24,6 +29,9 @@ public class VistaPintada extends View {
     private final int CIRCULO = 1;
     private final int LINEA_RECTA = 2;
     private final int LINEA_POLI = 3;
+    private ArrayList<Path> paths = new ArrayList<Path>();
+    private ArrayList<Path> undonePaths = new ArrayList<Path>();
+    private Path mPath;
 
     public VistaPintada(Context context) {
         super(context);
@@ -46,14 +54,21 @@ public class VistaPintada extends View {
         pincel.setColor(Color.BLACK);
         pincel.setAntiAlias(true);
         pincel.setStrokeWidth(5);
+        mPath = new Path();
+        paths.add(mPath);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         setCanvasFondo(canvas);
+        for (Path p : paths){
+            canvasFondo.drawPath(p, pincel);
+            Log.v("asdf", "Pth: " + p.toString());
+        }
         // Hasta aqui va a estar siempre.
         init();
+
         /**
          * Aqui se dibuja el canvas de bits asociado mientras estoy dibujando de forma provisional
          */
@@ -142,11 +157,14 @@ public class VistaPintada extends View {
     private void rectanguloCoord(float x, float y, MotionEvent event){
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
+                downStart(x, y);
                 pintando = true;
                 startX = x;
                 startY = y;
                 break;
             case MotionEvent.ACTION_MOVE:
+                mPath.reset();
+                mPath.moveTo(x, y);
                 stopX = x;
                 stopY = y;
                 break;
@@ -154,12 +172,14 @@ public class VistaPintada extends View {
                 pintando = false;
                 stopX = x;
                 stopY = y;
+                commitDraw();
                 break;
         }
     }
     private void circuloCoord(float x, float y, MotionEvent event){
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
+                downStart(x, y);
                 pintando = true;
                 startX = x;
                 startY = y;
@@ -174,12 +194,14 @@ public class VistaPintada extends View {
                 radio = (float) Math.sqrt(Math.pow(startX - stopX,2)+Math.pow(startY - stopY,2));
                 stopX = x;
                 stopY = y;
+                commitDraw();
                 break;
         }
     }
     private void lineaRectaCoord(float x, float y, MotionEvent event){
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
+                downStart(x, y);
                 pintando = true;
                 startX = x;
                 startY = y;
@@ -192,12 +214,14 @@ public class VistaPintada extends View {
                 pintando = false;
                 stopX = x;
                 stopY = y;
+                commitDraw();
                 break;
         }
     }
     private void lineaPoliCoord(float x, float y, MotionEvent event){
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
+                downStart(x, y);
                 pintando = true;
                 stopX= startX = x;
                 stopY = startY = y;
@@ -217,8 +241,39 @@ public class VistaPintada extends View {
                 stopX = x;
                 startY = stopY;
                 stopY = y;
+
+                commitDraw();
                 break;
         }
+    }
+
+    public void onClickUndo () {
+        if (paths.size()>0) {
+            undonePaths.add(paths.remove(paths.size()-1));
+            Log.v("asdf", "UNDO");
+            invalidate();
+        }
+    }
+
+    public void onClickRedo (){
+        if (undonePaths.size()>0) {
+            paths.add(undonePaths.remove(undonePaths.size()-1));
+            Log.v("asdf", "REDO");
+            invalidate();
+        }
+    }
+
+    private void commitDraw(){
+        // commit the path to our offscreen
+        canvasFondo.drawPath(mPath, pincel);
+        // kill this so we don't double draw
+        mPath = new Path();
+        paths.add(mPath);
+    }
+
+    private void downStart(float x, float y){
+        mPath.reset();
+        mPath.moveTo(x, y);
     }
 
 

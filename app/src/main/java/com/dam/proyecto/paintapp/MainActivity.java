@@ -43,6 +43,18 @@ public class MainActivity extends AppCompatActivity {
                 vistaPintada.setLineaPoligonal();
             }
         });
+        ibUndo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                vistaPintada.onClickUndo();
+            }
+        });
+        ibRedo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                vistaPintada.onClickRedo();
+            }
+        });
     }
 
     private void init(){
