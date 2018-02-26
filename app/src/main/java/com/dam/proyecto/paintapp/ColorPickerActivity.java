@@ -4,10 +4,12 @@ import com.github.danielnilsson9.colorpickerview.view.ColorPanelView;
 import com.github.danielnilsson9.colorpickerview.view.ColorPickerView;
 import com.github.danielnilsson9.colorpickerview.view.ColorPickerView.OnColorChangedListener;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -36,12 +38,12 @@ public class ColorPickerActivity extends Activity implements OnColorChangedListe
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         int initialColor = prefs.getInt("color_3", 0xFF000000);
 
-        mColorPickerView = (ColorPickerView) findViewById(R.id.colorpickerview__color_picker_view);
-        mOldColorPanelView = (ColorPanelView) findViewById(R.id.colorpickerview__color_panel_old);
-        mNewColorPanelView = (ColorPanelView) findViewById(R.id.colorpickerview__color_panel_new);
+        mColorPickerView = findViewById(R.id.colorpickerview__color_picker_view);
+        mOldColorPanelView = findViewById(R.id.colorpickerview__color_panel_old);
+        mNewColorPanelView = findViewById(R.id.colorpickerview__color_panel_new);
 
-        mOkButton = (Button) findViewById(R.id.okButton);
-        mCancelButton = (Button) findViewById(R.id.cancelButton);
+        mOkButton = findViewById(R.id.okButton);
+        mCancelButton = findViewById(R.id.cancelButton);
 
 
         ((LinearLayout) mOldColorPanelView.getParent()).setPadding(
@@ -68,9 +70,10 @@ public class ColorPickerActivity extends Activity implements OnColorChangedListe
 
         switch(v.getId()) {
             case R.id.okButton:
-                SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(this).edit();
-                edit.putInt("color_3", mColorPickerView.getColor());
-                edit.commit();
+                Log.v("asdf","COLOR pick win" + mColorPickerView.getColor());
+                Intent i = new Intent();
+                getIntent().putExtra("color", mColorPickerView.getColor());
+                setResult(RESULT_OK , i);
                 finish();
                 break;
             case R.id.cancelButton:

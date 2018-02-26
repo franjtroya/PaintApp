@@ -1,7 +1,10 @@
 package com.dam.proyecto.paintapp;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
@@ -17,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private android.widget.ImageButton ibStrightLine;
     private android.widget.ImageButton ibRedo;
     private android.widget.ImageButton ibUndo;
+    public static final int COLOR_PICKER = 1;
 
     private void events(){
         ibRectangle.setOnClickListener(new View.OnClickListener() {
@@ -43,6 +47,13 @@ public class MainActivity extends AppCompatActivity {
                 vistaPintada.setLineaPoligonal();
             }
         });
+        imOptions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent ifr = new Intent(MainActivity.this, ColorPickerActivity.class);
+                startActivityForResult(ifr , COLOR_PICKER);
+            }
+        });
         ibUndo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,13 +69,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init(){
-        this.ibUndo = (ImageButton) findViewById(R.id.ibUndo);
-        this.ibRedo = (ImageButton) findViewById(R.id.ibRedo);
-        this.ibStrightLine = (ImageButton) findViewById(R.id.ibStrightLine);
-        this.ibFreeLine = (ImageButton) findViewById(R.id.ibFreeLine);
-        this.ibCircle = (ImageButton) findViewById(R.id.ibCircle);
-        this.ibRectangle = (ImageButton) findViewById(R.id.ibRectangle);
-        this.imOptions = (ImageButton) findViewById(R.id.imOptions);
+        this.ibUndo = findViewById(R.id.ibUndo);
+        this.ibRedo = findViewById(R.id.ibRedo);
+        this.ibStrightLine = findViewById(R.id.ibStrightLine);
+        this.ibFreeLine = findViewById(R.id.ibFreeLine);
+        this.ibCircle = findViewById(R.id.ibCircle);
+        this.ibRectangle = findViewById(R.id.ibRectangle);
+        this.imOptions = findViewById(R.id.imOptions);
         vistaPintada = findViewById(R.id.vVistaPintada);
         events();
     }
@@ -78,5 +89,17 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
         );
         init();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK){
+            if(requestCode == COLOR_PICKER){
+                int color = data.getIntExtra("color" , Color.BLACK);
+                Log.v("asdf", "COLOR PICKER RESULT" + color);
+                Log.v("asdf", "COLOR BLACK" + Color.BLACK);
+                vistaPintada.setColor(color);
+            }
+        }
     }
 }

@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/PaintApp.iml" filepath="$PROJECT_DIR$/PaintApp.iml" />
-      <module fileurl="file://C:\Users\dam\AndroidStudioProjects\PaintApp\PaintApp.iml" filepath="C:\Users\dam\AndroidStudioProjects\PaintApp\PaintApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\dam\AndroidStudioProjects\PaintApp\app\app.iml" filepath="C:\Users\dam\AndroidStudioProjects\PaintApp\app\app.iml" />
     </modules>
   </component>
 </project>
