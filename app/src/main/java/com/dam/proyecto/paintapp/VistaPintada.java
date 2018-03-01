@@ -158,7 +158,6 @@ public class VistaPintada extends View {
 
     public void setColor(int color){
         pincelColor = color;
-        setColor(pincelColor);
     }
 
     private void rectanguloCoord(float x, float y, MotionEvent event){
@@ -251,22 +250,6 @@ public class VistaPintada extends View {
 
                 commitDraw();
                 break;
-        }
-    }
-
-    public void onClickUndo () {
-        if (paths.size()>0) {
-            undonePaths.add(paths.remove(paths.size()-1));
-            Log.v("asdf", "UNDO");
-            invalidate();
-        }
-    }
-
-    public void onClickRedo (){
-        if (undonePaths.size()>0) {
-            paths.add(undonePaths.remove(undonePaths.size()-1));
-            Log.v("asdf", "REDO");
-            invalidate();
         }
     }
 

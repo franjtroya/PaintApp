@@ -7,13 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageButton;
 
 public class MainActivity extends AppCompatActivity {
 
     private VistaPintada vistaPintada;
 
-    private android.widget.ImageButton imOptions;
+    private android.widget.ImageButton imbColor;
     private android.widget.ImageButton ibRectangle;
     private android.widget.ImageButton ibCircle;
     private android.widget.ImageButton ibFreeLine;
@@ -47,35 +46,21 @@ public class MainActivity extends AppCompatActivity {
                 vistaPintada.setLineaPoligonal();
             }
         });
-        imOptions.setOnClickListener(new View.OnClickListener() {
+        imbColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent ifr = new Intent(MainActivity.this, ColorPickerActivity.class);
                 startActivityForResult(ifr , COLOR_PICKER);
             }
         });
-        ibUndo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                vistaPintada.onClickUndo();
-            }
-        });
-        ibRedo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                vistaPintada.onClickRedo();
-            }
-        });
     }
 
     private void init(){
-        this.ibUndo = findViewById(R.id.ibUndo);
-        this.ibRedo = findViewById(R.id.ibRedo);
         this.ibStrightLine = findViewById(R.id.ibStrightLine);
         this.ibFreeLine = findViewById(R.id.ibFreeLine);
         this.ibCircle = findViewById(R.id.ibCircle);
         this.ibRectangle = findViewById(R.id.ibRectangle);
-        this.imOptions = findViewById(R.id.imOptions);
+        this.imbColor = findViewById(R.id.imbColor);
         vistaPintada = findViewById(R.id.vVistaPintada);
         events();
     }
@@ -99,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.v("asdf", "COLOR PICKER RESULT" + color);
                 Log.v("asdf", "COLOR BLACK" + Color.BLACK);
                 vistaPintada.setColor(color);
+                imbColor.setColorFilter(color);
             }
         }
     }

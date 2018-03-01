@@ -3,7 +3,7 @@ package com.dam.proyecto.paintapp;
 import com.github.danielnilsson9.colorpickerview.view.ColorPanelView;
 import com.github.danielnilsson9.colorpickerview.view.ColorPickerView;
 import com.github.danielnilsson9.colorpickerview.view.ColorPickerView.OnColorChangedListener;
-import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
@@ -14,7 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-public class ColorPickerActivity extends Activity implements OnColorChangedListener, View.OnClickListener {
+public class ColorPickerActivity extends AppCompatActivity implements OnColorChangedListener, View.OnClickListener {
 
     private ColorPickerView			mColorPickerView;
     private ColorPanelView			mOldColorPanelView;
@@ -72,7 +72,7 @@ public class ColorPickerActivity extends Activity implements OnColorChangedListe
             case R.id.okButton:
                 Log.v("asdf","COLOR pick win" + mColorPickerView.getColor());
                 Intent i = new Intent();
-                getIntent().putExtra("color", mColorPickerView.getColor());
+                i.putExtra("color", mColorPickerView.getColor());
                 setResult(RESULT_OK , i);
                 finish();
                 break;

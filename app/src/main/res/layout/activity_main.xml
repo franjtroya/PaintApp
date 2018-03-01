@@ -6,24 +6,33 @@
     android:layout_height="match_parent"
     tools:context="com.dam.proyecto.paintapp.MainActivity">
 
-    <view
-        android:id="@+id/vVistaPintada"
-        class="com.dam.proyecto.paintapp.VistaPintada"
-        id="@+id/view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+    <TextView
+        android:id="@+id/ivColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:text="Pincel width"
+        app:layout_constraintBottom_toTopOf="@+id/skbWidth"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <SeekBar
+        android:id="@+id/skbWidth"
+        android:layout_width="145dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imOptions" />
+        android:layout_marginLeft="8dp" />
 
     <ImageButton
-        android:id="@+id/imOptions"
+        android:id="@+id/imbColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ajustes" />
+        app:srcCompat="@drawable/paleta_colores" />
 
     <ImageButton
         android:id="@+id/ibRectangle"
@@ -44,7 +53,7 @@
     <ImageButton
         android:id="@+id/ibFreeLine"
         android:layout_width="wrap_content"
-        android:layout_height="53dp"
+        android:layout_height="0dp"
         app:layout_constraintStart_toEndOf="@+id/ibCircle"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/free_line" />
@@ -57,25 +66,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/linea_recta" />
 
-    <ImageButton
-        android:id="@+id/ibRedo"
-        android:layout_width="52dp"
+    <view
+        android:id="@+id/vVistaPintada"
+        class="com.dam.proyecto.paintapp.VistaPintada"
+        id="@+id/view"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="@+id/ibStrightLine"
-        app:layout_constraintEnd_toStartOf="@+id/imOptions"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/redo" />
-
-    <ImageButton
-        android:id="@+id/ibUndo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="@+id/ibStrightLine"
-        app:layout_constraintEnd_toStartOf="@+id/ibRedo"
-        app:layout_constraintStart_toEndOf="@+id/ibStrightLine"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/undo" />
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/ivColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ibStrightLine" />
 
 </android.support.constraint.ConstraintLayout>
