@@ -7,11 +7,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     private VistaPintada vistaPintada;
 
+    private SeekBar skbWidth;
+    private TextView lblWidth;
+    private android.widget.ImageButton imbDelete;
     private android.widget.ImageButton imbColor;
     private android.widget.ImageButton ibRectangle;
     private android.widget.ImageButton ibCircle;
@@ -53,6 +58,30 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(ifr , COLOR_PICKER);
             }
         });
+        imbDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                vistaPintada.clearCanvas();
+            }
+        });
+        skbWidth.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                vistaPintada.setWidth(i);
+                lblWidth.setText("Pincel width: " + i);
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 
     private void init(){
@@ -61,6 +90,10 @@ public class MainActivity extends AppCompatActivity {
         this.ibCircle = findViewById(R.id.ibCircle);
         this.ibRectangle = findViewById(R.id.ibRectangle);
         this.imbColor = findViewById(R.id.imbColor);
+        this.skbWidth = findViewById(R.id.skbWidth);
+        this.lblWidth = findViewById(R.id.lblWidth);
+        this.imbDelete = findViewById(R.id.imbDelete);
+
         vistaPintada = findViewById(R.id.vVistaPintada);
         events();
     }

@@ -33,6 +33,7 @@ public class VistaPintada extends View {
     private ArrayList<Path> undonePaths = new ArrayList<Path>();
     private Path mPath;
     private int pincelColor = Color.BLACK;
+    private float pincelWidth;
 
     public VistaPintada(Context context) {
         super(context);
@@ -55,6 +56,7 @@ public class VistaPintada extends View {
         pincel.setColor(pincelColor);
         pincel.setAntiAlias(true);
         pincel.setStrokeWidth(5);
+        pincel.setStrokeWidth(pincelWidth);
         mPath = new Path();
         paths.add(mPath);
     }
@@ -158,6 +160,14 @@ public class VistaPintada extends View {
 
     public void setColor(int color){
         pincelColor = color;
+    }
+
+    public void setWidth(float width){
+        this.pincelWidth = width;
+    }
+
+    public void clearCanvas(){
+        setCanvasFondo(canvasFondo);
     }
 
     private void rectanguloCoord(float x, float y, MotionEvent event){
