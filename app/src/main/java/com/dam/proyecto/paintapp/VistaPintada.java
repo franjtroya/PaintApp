@@ -46,6 +46,7 @@ public class VistaPintada extends View {
     private void setCanvasFondo(Canvas canvas){
         Paint pincel = new Paint();
         pincel.setColor(Color.WHITE);
+        pincel.setStyle(Paint.Style.FILL);
         pincel.setAntiAlias(true);
         canvas.drawRect(0, 0, getWidth(), getHeight(), pincel);
         pincel.setStrokeWidth(5);
@@ -57,17 +58,12 @@ public class VistaPintada extends View {
         pincel.setAntiAlias(true);
         pincel.setStrokeWidth(5);
         pincel.setStrokeWidth(pincelWidth);
-        mPath = new Path();
-        paths.add(mPath);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         setCanvasFondo(canvas);
-        for (Path p : paths){
-            canvasFondo.drawPath(p, pincel);
-        }
         // Hasta aqui va a estar siempre.
         init();
 
@@ -160,27 +156,27 @@ public class VistaPintada extends View {
 
     public void setColor(int color){
         pincelColor = color;
+        invalidate();
     }
 
     public void setWidth(float width){
         this.pincelWidth = width;
+        invalidate();
     }
 
     public void clearCanvas(){
         setCanvasFondo(canvasFondo);
+        invalidate();
     }
 
     private void rectanguloCoord(float x, float y, MotionEvent event){
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
-                downStart(x, y);
                 pintando = true;
                 startX = x;
                 startY = y;
                 break;
             case MotionEvent.ACTION_MOVE:
-                mPath.reset();
-                mPath.moveTo(x, y);
                 stopX = x;
                 stopY = y;
                 break;
@@ -188,14 +184,12 @@ public class VistaPintada extends View {
                 pintando = false;
                 stopX = x;
                 stopY = y;
-                commitDraw();
                 break;
         }
     }
     private void circuloCoord(float x, float y, MotionEvent event){
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
-                downStart(x, y);
                 pintando = true;
                 startX = x;
                 startY = y;
@@ -210,14 +204,12 @@ public class VistaPintada extends View {
                 radio = (float) Math.sqrt(Math.pow(startX - stopX,2)+Math.pow(startY - stopY,2));
                 stopX = x;
                 stopY = y;
-                commitDraw();
                 break;
         }
     }
     private void lineaRectaCoord(float x, float y, MotionEvent event){
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
-                downStart(x, y);
                 pintando = true;
                 startX = x;
                 startY = y;
@@ -230,14 +222,12 @@ public class VistaPintada extends View {
                 pintando = false;
                 stopX = x;
                 stopY = y;
-                commitDraw();
                 break;
         }
     }
     private void lineaPoliCoord(float x, float y, MotionEvent event){
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
-                downStart(x, y);
                 pintando = true;
                 stopX= startX = x;
                 stopY = startY = y;
@@ -257,24 +247,8 @@ public class VistaPintada extends View {
                 stopX = x;
                 startY = stopY;
                 stopY = y;
-
-                commitDraw();
                 break;
         }
     }
-
-    private void commitDraw(){
-        // commit the path to our offscreen
-        canvasFondo.drawPath(mPath, pincel);
-        // kill this so we don't double draw
-        mPath = new Path();
-        paths.add(mPath);
-    }
-
-    private void downStart(float x, float y){
-        mPath.reset();
-        mPath.moveTo(x, y);
-    }
-
 
 }
